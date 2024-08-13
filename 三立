@@ -1,0 +1,65 @@
+from bs4 import BeautifulSoup
+
+import requests
+
+url = "https://www.setn.com/ViewAll.aspx"
+
+header = {
+    
+    'user-agent':
+'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36',
+'cookie':
+'userKey=f15bd6c7-0033-420c-838b-f20a0b1bf1a9; __htid=21ff0b3c-74e8-43c3-852b-4cefda602bf5; _ht_em=1; AviviD_uuid=4046181d-2130-4322-8153-4781051928bc; webuserid=9e1e837e-d377-876e-da41-e22bc37e4d86; ch_tracking_uuid=1; AviviD_sw_version=1.0.868.210701; _ga=GA1.1.1650723594.1723118444; AviviD_tid_rmed=1; _fbp=fb.1.1723118444375.447461928653220347; _cc_id=ab4105c403644716aacb663d4c00e570; panoramaId_expiry=1723723245852; panoramaId=8eb9e09c0d518a35b2044861ec3c16d539381239d2d67f260882c8bddafb3a71; panoramaIdType=panoIndiv; _ht_47b240=1; __gads=ID=cbaf39adc2b47bd8:T=1723118445:RT=1723118445:S=ALNI_Mb_VtxmzenVw-PSUbMs3u5iGiAwug; __gpi=UID=00000eb935877b94:T=1723118445:RT=1723118445:S=ALNI_MZucJo9w7EZ5tMi_Ma-w5RUUlKdag; __eoi=ID=85fa499f4d520ed0:T=1723118445:RT=1723118445:S=AA-AfjbTSZzCKbBCgolf6f3jcz9m; stid=1650723594.1723118444; stid2=1650723594.1723118444; _ga_8NJ3QZRCY6=GS1.1.1723118444.1.1.1723118548.59.0.0; _ga_54ZJR9ZRH0=GS1.1.1723118444.1.1.1723118548.59.0.0; _ht_hi=1; AviviD_refresh_uuid_status=2; show_avivid_native_subscribe=2; _ttd_sync=1; FCNEC=%5B%5B%22AKsRol8YL7Iy50HrBGgFil8bOn2X4IJKDm9LAEjaMCoDqdH9-7OHTMOerKyfJ-0XwkNumXzRnmxyVF3tGlmn7fdwBFHJsExEN96XaJxvFGLEP2JE-wfTCJ_Y7Bw57z1Tk_60SxU3YKKG4x0FK5XOwWF0F0Rxm7v4SA%3D%3D%22%5D%5D; AviviD_already_exist=1; AviviD_show_sub=1; AviviD_token_retake=0; Privacy=true'
+
+}
+    
+data=requests.get(url,headers=header)
+
+data.encoding= "utf-8"
+
+data = data.text
+
+soup = BeautifulSoup(data,'html.parser')
+
+allnews = soup.find(id='NewsList')
+
+items = allnews.find_all('div',class_='col-sm-12 newsItems')
+
+for row in items:
+    time = row.find('time').text
+    title = row.find('h3').text
+    link = row.find('h3').find('a').get('href')
+    if not('https' in link):
+        link = "https://www.setn.com/"+link
+    
+ 
+        
+    print('時間',time)
+    print('標題',title)
+    print('連結',link)
+
+    print()
+        
+times = allnews.find_all('time')
+
+h3s = allnews.find_all('h3')
+
+
+
+
+# for i in range(len(times)): #times跟h3s的數量要一致
+#     time = times[i].text
+#     title = h3s[i].text
+#     link = h3s[i].find('a').get('href')
+    
+#     if not('https' in link):
+#         link = "https://www.setn.com/"+link
+    
+ 
+        
+#     print('時間',time)
+#     print('標題',title)
+#     print('連結',link)
+
+#     print()
+        
