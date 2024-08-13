@@ -1,0 +1,42 @@
+from bs4 import BeautifulSoup
+
+import requests
+
+url = "https://news.tvbs.com.tw/realtime"
+
+header = {
+    
+    'user-agent':
+'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36',
+'cookie':
+'cho_weather=%E8%87%BA%E5%8C%97%E5%B8%82; AMP_TOKEN=%24NOT_FOUND; _gid=GA1.3.243857054.1723123401; _gat=1; FPID=FPID2.3.bOnTTf2MBF3AlhuL6Pi1vgT31%2Bmi0mO3yJJ3NCZO5PA%3D.1723123401; FPLC=Cyz7t8xsVZFOg%2FQH%2BW0jmbxMR%2FdQ21Qc1fmbeZZf%2FqA70x%2Bt0YFgiJdFYPWeBWaMxOH%2BaYERk%2BlXdb%2BQB37mdQbD1Qfm82nDwNtg%2FnqdK6HE4jfjK6ds9OFwhrgM6w%3D%3D; FPGSID=1.1723123402.1723123402.G-B8E0BLEGRH.rdTKHdEIqD_hFPhQeMKb4g; trc_cookie_storage=taboola%2520global%253Auser-id%3Dd6fd067b-e663-48e8-9088-95bafbebdd34-tuctc2a5a9f; _fbp=fb.2.1723123401845.865182775769919937; _clck=v4vywq%7C2%7Cfo5%7C0%7C1681; __gads=ID=30a420210397efe8:T=1723123402:RT=1723123402:S=ALNI_MZhTyemwtlAE4tD_HvvnwOHlzpFow; __gpi=UID=00000eb93ffb566b:T=1723123402:RT=1723123402:S=ALNI_Mbb_fm7Zh-Ro_X0oe6bE4lJfBVSIQ; __eoi=ID=f31217f179a32393:T=1723123402:RT=1723123402:S=AA-AfjYfJ7KpHUnqRA8iXCPpXHqu; _cc_id=ab4105c403644716aacb663d4c00e570; panoramaId_expiry=1723728204556; panoramaId=8eb9e09c0d518a35b2044861ec3c16d539381239d2d67f260882c8bddafb3a71; panoramaIdType=panoIndiv; _ga_B8E0BLEGRH=GS1.1.1723123401.1.1.1723123407.0.0.674312401; _ga=GA1.1.790582755.1723123401; _ga_PT43NBSMZN=GS1.3.1723123401.1.1.1723123407.54.0.0; _clsk=q7fjcb%7C1723123407836%7C2%7C0%7Cz.clarity.ms%2Fcollect; FCNEC=%5B%5B%22AKsRol8RiFECc7jCJWJN4qyALPCyP3CMKYJpHmZo3PXv_rBa4PueGx4K-HbNSOJ4Ye-pVGQjTpsTbaN5QP4d7cpPSea5IIGeD4riXYQ4pH8Q_CZh5OrjZ1MzBfH_gOPzW1hXVg3Cxu0kSGzYJZbTNt3BeSVUNsGUsA%3D%3D%22%5D%5D'
+    
+}
+    
+data=requests.get(url,headers=header)
+
+data.encoding= "utf-8"
+
+data = data.text
+
+soup = BeautifulSoup(data,'html.parser')
+
+allnews = soup.find(class_='news_list')
+
+news = allnews.find(class_='list')
+
+items = news.find_all('li')
+
+for row in items:
+    if row.find('h2') != None:
+        time = row.find(class_="time").text
+        link = row.find('a').get('href')
+        title = row.find('h2').text
+        photo = row.find('img').get('data-original')
+        if not('https' in link):
+            link = "https://news.tvbs.com.tw/"+link
+        print('時間',time)
+        print('標題',title)
+        print('連結',link)
+        
+        print()
